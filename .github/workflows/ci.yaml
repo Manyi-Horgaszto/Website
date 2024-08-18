@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github. run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          submodules: 'recursive'
+
+      - name: Set up Hugo
+        uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
+        with:
+          hugo-version: '0.110.0'
+          extended: true
+
+      - name: Set up Node
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          cd themes/ananke
+          npm install
+
+      - name: Set up PostCSS
+        run: npm install --save-dev autoprefixer postcss-cli postcss
+
+      - name: Build
+        run: hugo
+
+  test:
+    name: Link check with htmltest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          submodules: 'recursive'
+
+      - name: Set up Hugo
+        uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
+        with:
+          hugo-version: '0.110.0'
+          extended: true
+
+      - name: Set up Node
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: |
+          cd themes/docsy
+          npm install
+
+      - name: Set up PostCSS
+        run: npm install --save-dev autoprefixer postcss-cli postcss
+
+      - name: Build
+        run: hugo
+
+      - name: Test HTML
+        continue-on-error: false
+        uses: wjdp/htmltest-action@master
+        with:
+          config: .htmltest.yml
+          path: public
+
+      - name: Archive htmltest results
+        uses: actions/upload-artifact@v4
+        with:
+          name: htmltest-report
+          path: tmp/.htmltest/htmltest.log
+          retention-days: 7

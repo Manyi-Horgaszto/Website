@@ -1,0 +1,4 @@
+title = "Mányi horgásztó"
+theme = ["ananke"]
+baseurl = "/"
+languageCode = "en-us"
