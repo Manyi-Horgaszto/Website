@@ -1,4 +1,4 @@
-baseurl = "https://manyi-horgaszto.github.io/"
+baseurl = "https://manyi-horgaszto.github.io/Website"
 buildDrafts = false
 #googleAnalytics = "G-FIXME"
 
@@ -9,4 +9,4 @@ buildDrafts = false
 
 [params]
 
-url_latest_version = "https://manyi-horgaszto.github.io/"
+url_latest_version = "https://manyi-horgaszto.github.io/Website"
