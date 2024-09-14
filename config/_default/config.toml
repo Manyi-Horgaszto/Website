@@ -1,4 +1,4 @@
-title = "Mányi horgásztó"
-theme = ["ananke"]
+title = "Mányi Horgásztó"
+theme = ["piko"]
 baseurl = "/"
 languageCode = "en-us"

@@ -1,0 +1,14 @@
+{{- /* layouts/partials/head.html */ -}}
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <!-- Existing head content -->
+    <link rel="stylesheet" href="{{ "css/custom.css" | relURL }}">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="content">
+        {{ block "main" . }}{{ end }}
+    </div>
+</body>
+</html>
